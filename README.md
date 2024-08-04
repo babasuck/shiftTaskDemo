@@ -18,12 +18,16 @@ consectetur adipiscing
 
 Output sample-strings.txt
 
-Lorem ipsum dolor sit amet
-Нормальная форма числа с плавающей запятой
-Пример
-Long
 consectetur adipiscing
 тестовое задание
+
+Output sample-integers.txt
+45
+100500
+
+Output sample-floats.txt
+3.1415
+-0.001
 ```
 
 ## Requirements
