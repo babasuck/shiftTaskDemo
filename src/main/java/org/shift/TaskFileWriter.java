@@ -22,6 +22,8 @@ public class TaskFileWriter {
     }
 
     public void writeDataLine(Path path, List<?> lines) throws IOException {
+        if(lines.isEmpty())
+            return;
         try(BufferedWriter writer = Files.newBufferedWriter(path, openOptions)) {
             for(var line : lines) {
                 writer.write(Objects.toString(line));

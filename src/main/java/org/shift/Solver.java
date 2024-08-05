@@ -70,12 +70,22 @@ public class Solver {
                 writer.writeDataLine(floatsPath, floatsData);
                 writer.writeDataLine(stringsPath, stringsData);
                 if (arguments.isFullStat()) {
-                     stats = new Statistics(
-                            Collections.min(intsData),
-                            Collections.max(intsData),
-                            Collections.min(floatsData), Collections.max(floatsData),
-                            Collections.min(stringsData, Comparator.comparingInt(String::length)).length(),
-                            Collections.max(stringsData, Comparator.comparingInt(String::length)).length());
+                    long intMin = 0, intMax = 0;
+                    float floatMin = 0.0f, floatMax = 0.0f;
+                    int stringShortest = 0, stringTallest = 0;
+                    if (!intsData.isEmpty()) {
+                        intMin = Collections.min(intsData);
+                        intMax = Collections.max(intsData);
+                    }
+                    if (!floatsData.isEmpty()) {
+                        floatMin = Collections.min(floatsData);
+                        floatMax = Collections.max(floatsData);
+                    }
+                    if (!stringsData.isEmpty()) {
+                        stringShortest = Collections.min(stringsData, Comparator.comparingInt(String::length)).length();
+                        stringTallest = Collections.max(stringsData, Comparator.comparingInt(String::length)).length();
+                    }
+                     stats = new Statistics(intMin, intMax, floatMin, floatMax, stringShortest, stringTallest);
                 }
             }
             catch (NoSuchFileException e) {
