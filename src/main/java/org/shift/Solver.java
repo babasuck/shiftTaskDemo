@@ -16,10 +16,6 @@ public class Solver {
     private Path stringsPath;
 
     private Statistics stats;
-    /**
-     * Count of each types in files
-     */
-    private int intsCount = 0, floatsCount = 0, stringsCount = 0;
 
     /**
      * Place holders for data
@@ -40,10 +36,6 @@ public class Solver {
             System.err.println("Invalid prefix for output files.");
             System.exit(-1);
         }
-    }
-
-    public static void validateData(Arguments args) throws IllegalArgumentException{
-
     }
 
     /**
