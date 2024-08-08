@@ -34,7 +34,7 @@ Output sample-floats.txt
 Test task for shift Java course by CFT\
 Version of Java JDK - Java SE 22 \
 Build system - Maven 4.0.0 \
-Dependencies - Jcommander to parse command line parameters 
+Dependencies - Jcommander to parse command line parameters, JUnit 5 
 
 ```dtd
         <dependency>
