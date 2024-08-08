@@ -58,7 +58,7 @@ public class Tester {
     }
 
     @Test
-    void should_NotCreateFiles_WhenFilesIsEmpty() {
+    void should_NotCreateResultFiles_WhenFilesIsEmpty() {
         String[] args = {"-p", "result-", "./src/main/resources/in1empty.txt", "./src/main/resources/in2empty.txt"};
         deleteResultFilesIfExist("result-");
 
@@ -76,6 +76,54 @@ public class Tester {
         assertFalse(Files.exists(resultFloat));
         assertFalse(Files.exists(resultInt));
         assertFalse(Files.exists(resultStrings));
+    }
+
+    @Test
+    void testAppendMode() {
+        String[] args = {"-f", "-a", "-p", "result-", "./src/main/resources/in1.txt", "./src/main/resources/in2.txt"};
+
+    }
+
+    @Test
+    void testOutputParam() {
+        String appdata = System.getenv("appdata");
+        String[] args = {"-o", appdata, "./src/main/resources/in1.txt", "./src/main/resources/in2.txt"};
+        solver = makeSolver(makeArgumentsFromStringArray(args));
+        boolean noExceptions = true;
+
+        try {
+            solver.solve();
+        } catch (IOException e) {
+            noExceptions = false;
+            System.err.println(e);
+        }
+
+        Path resultFloat = Path.of(appdata + "/result-floats.txt");
+        Path resultInt = Path.of(appdata + "/result-integer.txt");
+        Path resultStrings = Path.of(appdata + "/result-strings.txt");
+
+        try {
+            List<String> floatLines = Files.readAllLines(resultFloat);
+            List<String> intLines = Files.readAllLines(resultInt);
+            List<String> stringLines = Files.readAllLines(resultStrings);
+
+            assertLinesMatch(floatLines, List.of("3.1415", "-0.001", "1.5285351E-25"));
+            assertLinesMatch(intLines, List.of("45", "100500", "1234567890123456789"));
+            assertLinesMatch(stringLines, List.of(
+                    "Lorem ipsum dolor sit amet",
+                    "Пример",
+                    "consectetur adipiscing",
+                    "тестовое задание",
+                    "Нормальная форма числа с плавающей запятой",
+                    "Long"
+            ));
+        }
+        catch (IOException e) {
+            System.err.println("Error with files. " + e);
+            noExceptions = false;
+        }
+        assertTrue(noExceptions);
+        deleteResultFilesIfExist("result-");
     }
 
 

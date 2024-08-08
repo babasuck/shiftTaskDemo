@@ -28,9 +28,9 @@ public class Solver {
         this.arguments = args;
         String outPath = arguments.getOutPath();
         try {
-            this.intsPath = Path.of(outPath + String.format("%s%s", arguments.getOutputFilesPrefix(), "integer.txt"));
-            this.floatsPath = Path.of(outPath + String.format("%s%s", arguments.getOutputFilesPrefix(), "floats.txt"));
-            this.stringsPath = Path.of(outPath + String.format("%s%s", arguments.getOutputFilesPrefix(), "strings.txt"));
+            this.intsPath = Path.of(outPath + "/" + String.format("%s%s", arguments.getOutputFilesPrefix(), "integer.txt"));
+            this.floatsPath = Path.of(outPath + "/" + String.format("%s%s", arguments.getOutputFilesPrefix(), "floats.txt"));
+            this.stringsPath = Path.of(outPath + "/" + String.format("%s%s", arguments.getOutputFilesPrefix(), "strings.txt"));
         }
         catch (InvalidPathException e) {
             System.err.println("Invalid prefix for output files.");
