@@ -10,7 +10,6 @@ public class TaskFileWriter {
      * Check if -append option is applied
      */
     private StandardOpenOption[] openOptions;
-    private BufferedWriter writer;
 
     public TaskFileWriter(boolean isAppend) {
         if (isAppend) {

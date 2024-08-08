@@ -20,17 +20,19 @@ public class Solver {
     /**
      * Place holders for data
      */
-    List<Long> intsData = new LinkedList<>();
-    List<Float> floatsData = new LinkedList<>();
-    List<String> stringsData = new LinkedList<>();
+    private List<Long> intsData = new LinkedList<>();
+    private List<Float> floatsData = new LinkedList<>();
+    private List<String> stringsData = new LinkedList<>();
 
     public Solver(Arguments args) {
         this.arguments = args;
         String outPath = arguments.getOutPath();
+        if (!outPath.isEmpty())
+            outPath += "/";
         try {
-            this.intsPath = Path.of(outPath + "/" + String.format("%s%s", arguments.getOutputFilesPrefix(), "integer.txt"));
-            this.floatsPath = Path.of(outPath + "/" + String.format("%s%s", arguments.getOutputFilesPrefix(), "floats.txt"));
-            this.stringsPath = Path.of(outPath + "/" + String.format("%s%s", arguments.getOutputFilesPrefix(), "strings.txt"));
+            this.intsPath = Path.of(outPath  + String.format("%s%s", arguments.getOutputFilesPrefix(), "integer.txt"));
+            this.floatsPath = Path.of(outPath + String.format("%s%s", arguments.getOutputFilesPrefix(), "floats.txt"));
+            this.stringsPath = Path.of(outPath + String.format("%s%s", arguments.getOutputFilesPrefix(), "strings.txt"));
         }
         catch (InvalidPathException e) {
             System.err.println("Invalid prefix for output files.");
@@ -42,6 +44,7 @@ public class Solver {
      * Main method to complete the task.
      */
     public void solve() throws IOException {
+        TaskFileWriter writer = new TaskFileWriter(arguments.isAppend());
         for(var file : arguments.getFiles()) {
             Path filePath = Path.of(file);
             try (var reader = Files.newBufferedReader(filePath, StandardCharsets.UTF_8)) {
@@ -55,29 +58,28 @@ public class Solver {
                         stringsData.add(line);
                     }
                 }
-                TaskFileWriter writer = new TaskFileWriter(arguments.isAppend());
-                writer.writeDataLine(intsPath, intsData);
-                writer.writeDataLine(floatsPath, floatsData);
-                writer.writeDataLine(stringsPath, stringsData);
-                if (arguments.isFullStat()) {
-                    long intMin = 0, intMax = 0;
-                    float floatMin = 0.0f, floatMax = 0.0f;
-                    int stringShortest = 0, stringTallest = 0;
-                    if (!intsData.isEmpty()) {
-                        intMin = Collections.min(intsData);
-                        intMax = Collections.max(intsData);
-                    }
-                    if (!floatsData.isEmpty()) {
-                        floatMin = Collections.min(floatsData);
-                        floatMax = Collections.max(floatsData);
-                    }
-                    if (!stringsData.isEmpty()) {
-                        stringShortest = Collections.min(stringsData, Comparator.comparingInt(String::length)).length();
-                        stringTallest = Collections.max(stringsData, Comparator.comparingInt(String::length)).length();
-                    }
-                    stats = new Statistics(intMin, intMax, floatMin, floatMax, stringShortest, stringTallest);
-                }
             }
+        }
+        writer.writeDataLine(intsPath, intsData);
+        writer.writeDataLine(floatsPath, floatsData);
+        writer.writeDataLine(stringsPath, stringsData);
+        if (arguments.isFullStat()) {
+            long intMin = 0, intMax = 0;
+            float floatMin = 0.0f, floatMax = 0.0f;
+            int stringShortest = 0, stringTallest = 0;
+            if (!intsData.isEmpty()) {
+                intMin = Collections.min(intsData);
+                intMax = Collections.max(intsData);
+            }
+            if (!floatsData.isEmpty()) {
+                floatMin = Collections.min(floatsData);
+                floatMax = Collections.max(floatsData);
+            }
+            if (!stringsData.isEmpty()) {
+                stringShortest = Collections.min(stringsData, Comparator.comparingInt(String::length)).length();
+                stringTallest = Collections.max(stringsData, Comparator.comparingInt(String::length)).length();
+            }
+            stats = new Statistics(intMin, intMax, floatMin, floatMax, stringShortest, stringTallest);
         }
     }
     private static boolean isInt(String s) {
