@@ -41,19 +41,17 @@ public class Solver {
     /**
      * Main method to complete the task.
      */
-    public void solve() {
+    public void solve() throws IOException {
         for(var file : arguments.getFiles()) {
             Path filePath = Path.of(file);
             try (var reader = Files.newBufferedReader(filePath, StandardCharsets.UTF_8)) {
                 List<String> lines = reader.lines().toList();
-                for(var line : lines) {
-                    if(isInt(line)) {
+                for (var line : lines) {
+                    if (isInt(line)) {
                         intsData.add(Long.valueOf(line));
-                    }
-                    else if (isFloat(line)) {
+                    } else if (isFloat(line)) {
                         floatsData.add(Float.valueOf(line));
-                    }
-                    else {
+                    } else {
                         stringsData.add(line);
                     }
                 }
@@ -77,17 +75,8 @@ public class Solver {
                         stringShortest = Collections.min(stringsData, Comparator.comparingInt(String::length)).length();
                         stringTallest = Collections.max(stringsData, Comparator.comparingInt(String::length)).length();
                     }
-                     stats = new Statistics(intMin, intMax, floatMin, floatMax, stringShortest, stringTallest);
+                    stats = new Statistics(intMin, intMax, floatMin, floatMax, stringShortest, stringTallest);
                 }
-            }
-            catch (NoSuchFileException e) {
-                System.err.println("Error while handling " + filePath + ", file not found.");
-            }
-            catch (AccessDeniedException e) {
-                System.err.println("Error while handling " + filePath + ", Access Denied.");
-            }
-            catch (IOException e) {
-                System.err.println("Error while handling " + filePath + " " + e);
             }
         }
     }
